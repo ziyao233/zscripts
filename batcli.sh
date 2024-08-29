@@ -34,7 +34,7 @@ do_info() {
 	for bat in "${batlist[@]}"; do
 		printf "BATTERY %s:\n" "$bat"
 		for prop in "$@"; do
-			echo $(get_prop "$bat" "$prop")
+			get_prop "$bat" "$prop"
 		done
 	done
 }
@@ -65,7 +65,7 @@ do_percentage() {
 	for bat in "${batlist[@]}"; do
 		local now=$(get_prop "$bat" "energy_now")
 		local full=$(get_prop "$bat" "energy_full")
-		echo "$(calc_percentage $now $full)"
+		calc_percentage "$now" "$full"
 	done
 }
 
@@ -80,7 +80,6 @@ shift
 case "$opt" in
 list)
 	for bat in "${bat[@]}"; do
-		# shellcheck disable=SC2086
 		echo "$bat"
 	done ;;
 info)
