@@ -19,11 +19,18 @@ do
 	batlist+=("$bat")
 done
 
+have_prop() {
+	local bat=$1
+	local prop=$2
+
+	[ -f "$bat/$prop" ]
+}
+
 get_prop() {
 	local bat=$1
 	local prop=$2
 
-	if [ -f "$bat/$prop" ]; then
+	if have_prop "$bat" "$prop"; then
 		cat "$bat/$prop"
 	else
 		echo "(Not exist)"
@@ -63,8 +70,18 @@ do_interesting_info() {
 
 do_percentage() {
 	for bat in "${batlist[@]}"; do
-		local now=$(get_prop "$bat" "energy_now")
-		local full=$(get_prop "$bat" "energy_full")
+		local now
+		local full
+		if have_prop "$bat" energe_now; then
+			now=$(get_prop "$bat" "energy_now")
+			full=$(get_prop "$bat" "energy_full")
+		elif have_prop "$bat" charge_full; then
+			now=$(get_prop "$bat" "charge_now")
+			full=$(get_prop "$bat" "charge_full")
+		else
+			echo "No information for $bat"
+			continue
+		fi
 		calc_percentage "$now" "$full"
 	done
 }
