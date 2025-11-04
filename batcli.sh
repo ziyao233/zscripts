@@ -72,7 +72,7 @@ do_percentage() {
 	for bat in "${batlist[@]}"; do
 		local now
 		local full
-		if have_prop "$bat" energe_now; then
+		if have_prop "$bat" energy_now; then
 			now=$(get_prop "$bat" "energy_now")
 			full=$(get_prop "$bat" "energy_full")
 		elif have_prop "$bat" charge_full; then
